@@ -4,28 +4,33 @@ const UserSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        required: 'Username is required',
+        required: true,
         trim: true,
-
     },
     email: {
         type: String,
-        required: 'Email is required',
+        required: true,
         unique: true,
         match: [/.+@.+\..+/]
     },
-    thoughts: [{
-        type: Schema.Types.ObjectId,
-        ref:'Thought'
+    thoughts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref:'Thought'
     }],
-    friends:[{
-        type: Schema.Types.ObjectId,
-        ref:'User'
-    }]
+    friends:[
+        {
+            type: Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ]
 },
 {
-    toJSON: {virtuals:true,},
-    id: false
+    toJSON: {
+        virtuals:true,
+        getters: true,
+    },
+    id: false,
 }
 );
 

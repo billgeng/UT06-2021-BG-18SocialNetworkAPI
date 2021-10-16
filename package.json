@@ -1,0 +1,30 @@
+{
+  "name": "ut06-2021-bg-18socialnetworkapi",
+  "version": "1.0.0",
+  "description": "Social Network API",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/billgeng/UT06-2021-BG-18SocialNetworkAPI.git"
+  },
+  "keywords": [
+    "Mongoose",
+    "Express",
+    "Mongdb"
+  ],
+  "author": "Bill Geng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/billgeng/UT06-2021-BG-18SocialNetworkAPI/issues"
+  },
+  "homepage": "https://github.com/billgeng/UT06-2021-BG-18SocialNetworkAPI#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.11"
+  }
+}
