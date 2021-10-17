@@ -25,6 +25,6 @@
   "dependencies": {
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "mongoose": "^6.0.11"
+    "mongoose": "^5.9.9"
   }
 }

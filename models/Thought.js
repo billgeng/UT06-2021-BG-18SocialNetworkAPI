@@ -4,19 +4,19 @@ const moment = require('moment');
 
 const ReactionSchema = new Schema({
     reactonId:{
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId(),
+        type: Types.ObjectId,
+        default: new Types.ObjectId(),
     },
     reactionBody: {
         type:String,
         required: true,
-        maxLength: 280,
+        maxLength: 280
     },
     username: {
-        type:String,
-        required: true,
+        type: String,
+        required: true
     },
-    creatdAt: {
+    createdAt: {
         type: Date,
         default: Date.now,
         get: (createdAtVal) => moment(createdAtVal).format('YYYY-MM-DD [at] hh:mm a')
@@ -25,10 +25,10 @@ const ReactionSchema = new Schema({
 }, 
 {
     toJSON:{
-         getters: true,
+         getters: true
     },
-}
-);
+    id: false
+});
 
 
 const ThoughtSchema = new Schema(
@@ -40,7 +40,7 @@ const ThoughtSchema = new Schema(
          maxLength: 280
 
     },
-    creatdAt: {
+    createdAt: {
         type : Date,
         default: Date.now,
         get: (createdAtVal) => moment(createdAtVal).format('YYYY-MM-DD [at] hh:mm a')
@@ -50,7 +50,7 @@ const ThoughtSchema = new Schema(
         type: String, 
         required: true
     },
-    reactions: [ReactionSchema],
+    reactions: [ReactionSchema]
 
 },
 {

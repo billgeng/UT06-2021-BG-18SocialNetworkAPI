@@ -1,8 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const dbConnection = require('./config/connection') ;
 
 const app = express();
-const PORT = process.env.PORT || 3008;
+const PORT = process.env.PORT || 3001;
 
 
 
@@ -11,16 +11,8 @@ app.use(express.json());
 
 app.use(require('./routes'));
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/Social-Network',{
-    useFindAndModify: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
 
-mongose.set('useCreateIndex',true);
-mongose.set('debug',true);
-
-
-app.listen(PORT,() => {
-    console.log(`App running on port: ${PORT}`);
-});
+dbConnection.once('open',()=>{app.listen(PORT,() => {
+      console.log(`App running on port: ${PORT}`);
+     });
+    });

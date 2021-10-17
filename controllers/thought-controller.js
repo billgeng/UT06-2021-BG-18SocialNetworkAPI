@@ -38,16 +38,15 @@ const thoughtController = {
 
     // create a new thought
     createThought({body},res) {
-        console.log(body);
         Thought.create(body)
         .then((dbThoughtData) =>{
-            return User.findOneAndUpdate(
-                {_id:body.userId}, 
-                {$push:{thoughts:thoughtData._id}},
+             User.findOneAndUpdate(
+                {_id: body.userId}, 
+                {$push:{ thoughts: dbThoughtData._id}},
                 {new:true}
                 );
         })
-        .then((dbUserData) =>{
+        .then((dbUserData) => {
             if (!dbUserData) {
                 res.status(404).json({message:'No user found with this Id'});
                 return;
@@ -79,7 +78,15 @@ const thoughtController = {
                 res.status(404).json({message:'No thought found with this Id'});
                 return;
             }
-            res.json(dbThoughtData);
+            User.findOneAndUpdate(
+                { username: dbThoughtData.username },
+                { $pull: {thoughts:params.id}}
+            )
+            .then (() =>{
+                res.json({message:'Successfully deleted the thought'});
+            })
+            .catch((err) =>res.status(400).json(err));
+            
         })
         .catch((err) => res.status(400).json(err));
     },
@@ -102,14 +109,20 @@ const thoughtController = {
             .catch((err) => res.status(400).json(err));
     },
     // delete reaction
-    deleteReaction({params},res) {
-        Thought.findOneAndDelete(
+    deleteReaction({params,body},res) {
+        Thought.findOneAndUpdate(
             {_id:params.thoughtId},
-            {$pull: {reactions:{reactionId: params.reactionId } } },
+            {$pull: {reactions:{reactionId: body.reactionId } } },
             {new:true}           
             
       )
-      .then((dbThoughtData) => res.json(dbThoughtData))
+      .then((dbThoughtData) => {
+          if (!dbThoughtData) {
+              res.status(404).json({message:'No thought found with this Id'});
+              return;
+          }        
+           res.json(dbThoughtData);
+        })
       .catch((err) => res.status(400).json(err));
     },
 };
