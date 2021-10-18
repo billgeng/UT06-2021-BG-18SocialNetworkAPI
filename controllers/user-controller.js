@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 const { populate } = require('../models/User');
 
 const userController = {
@@ -76,13 +76,14 @@ const userController = {
     },
 
     // add friend
-    addFriend({params},res) {
-                
+    addFriend({ params },res) {
+         console.log(params);       
         User.findOneAndUpdate(
-            {_id:params.userId},
-            {$push: {friends:params.friendsId }},
+            {_id:params.userid},
+            {$addToSet: {friends: params.friendId}},
             {new: true}        
         )
+       
         .then ((dbUserData) => {
             if (!dbUserData) {
                 res.status(404).json({message:'No user found with this Id'});
@@ -96,8 +97,8 @@ const userController = {
     // remove friend from list
     removeFriend({params},res) {
         User.findOneAndUpdate(
-            {_id:params.userId},
-            {$pull: {friends:params.friendsId}},
+            {_id:params.userid},
+            {$pull: {friends:params.friendId}},
             {new: true} 
             )
             .then((dbUserData) =>{

@@ -40,13 +40,14 @@ const thoughtController = {
     // create a new thought
     createThought({body},res) {
         Thought.create(body)
-        .then(({_id}) => {
+        .then((dbThoughtData) => {
            return User.findOneAndUpdate(
-                {_id: body.userId}, 
-                {$push:{ thoughts: _id}},
+                { _id: body.userid}, 
+                {$push:{ thoughts: dbThoughtData._id}},
                 {new: true}
                 );
            })
+           
              .then((dbUserData) => {
             
             if (!dbUserData) {
@@ -100,7 +101,7 @@ const thoughtController = {
         
         Thought.findOneAndUpdate(
             {_id:params.thoughtId},
-            {$push: {reactions:body}},
+            {$addToSet: {reactions:body}},
             {new:true}
             )
             .then((dbThoughtData) =>{
