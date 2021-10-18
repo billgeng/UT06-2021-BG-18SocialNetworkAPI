@@ -13,6 +13,7 @@ const thoughtController = {
             select: '-__v',
         })
         .select('-__v')
+        .sort({_id:-1})
         .then((dbThoughtData) => res.json(dbThoughtData))
         .catch((err) => {
             console.log(err);
@@ -37,7 +38,7 @@ const thoughtController = {
     },
 
     // create a new thought
-    createThought({params,body},res) {
+    createThought({body},res) {
         Thought.create(body)
         .then(({_id}) => {
            return User.findOneAndUpdate(
@@ -48,7 +49,7 @@ const thoughtController = {
            })
              .then((dbUserData) => {
             
-            if (!dbUserData._id) {
+            if (!dbUserData) {
                 res.status(404).json({message:'No User found with this Id'});
                 return;
             }
@@ -77,8 +78,8 @@ const thoughtController = {
         Thought.findOneAndDelete({_id:params.id})
         .then((dbThoughtData) =>{
             if (!dbThoughtData) {
-                res.status(404).json({message:'No thought found with this Id'});
-                return;
+             return  res.status(404).json({message:'No thought found with this Id'});
+                
             }
             User.findOneAndUpdate(
                 { username: dbThoughtData.username },
@@ -96,9 +97,10 @@ const thoughtController = {
     // add Reaction
 
     addReaction({params,body},res) {
+        
         Thought.findOneAndUpdate(
             {_id:params.thoughtId},
-            {$addToSet: {reactions:body}},
+            {$push: {reactions:body}},
             {new:true}
             )
             .then((dbThoughtData) =>{
@@ -111,10 +113,11 @@ const thoughtController = {
             .catch((err) => res.status(400).json(err));
     },
     // delete reaction
-    deleteReaction({params,body},res) {
+    deleteReaction({ params },res) {
+        
         Thought.findOneAndUpdate(
             {_id:params.thoughtId},
-            {$pull: {reactions:{reactionId: body.reactionId } } },
+            {$pull: {reactions:{reactionId: params.reactionId } } },
             {new:true}           
             
       )
